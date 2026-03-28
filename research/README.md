@@ -89,11 +89,13 @@ This is a memorial webpage for **Fabian "Haian" Schüßler** (born 30.10.1986, d
 
 ## 5. Steganography Analysis
 
-### Image Analysis (haian_mit_text_skaliert_rand.jpeg)
-- **EXIF**: None present
-- **Trailing data**: None after JPEG EOI marker
-- **LSB extraction**: 1-bit and 2-bit patterns show only 0xFF/0x55 (normal image noise)
-- **File signatures in LSB**: None detected
+### Image Analysis Complete
+- **JPEG structure**: Standard markers, no anomalies
+- **APP segments**: Only APP0 (JFIF header) found
+- **Comment segments (COM)**: None found
+- **Hidden strings**: None detected
+- **LSB distribution**: Normal (Y channel has natural distribution, Cb/Cr are constant 128)
+- **Conclusion**: No steganography detected in image
 
 ### HTML Whitespace Stego
 - No SNOW/whitespace encoding detected
@@ -194,6 +196,43 @@ From Ihno's message: "Dein Blatt war so viel besser, als nur bis 24 zu reizen, d
 3. **Timestamp pattern analysis** - Convert hours/minutes to other encodings
 4. **Message content analysis** - Check Nth word patterns, telestic
 5. **Server enumeration** - Test additional paths
+
+---
+
+## 10. Summary of Findings
+
+### Key Numbers Identified
+| Number | Source | Significance |
+|--------|--------|--------------|
+| 24 | Ihno's message | Skat Grand bid value |
+| 120 | Ihno's message | Skat Grand Ouvert value |
+| 5 | Math (120/24, 60-55) | **Likely the key** |
+| 24 | Isabella's date | Day 24.02.2012 |
+| 55-60 | Thomas's message | Difference = 5 |
+
+### Image Analysis
+- **No EXIF data**
+- **No LSB steganography** (only noise patterns)
+- **No trailing data** after JPEG EOI marker
+- **No comment segments** in JPEG structure
+- **No hidden strings** in binary
+
+### HTML/Text Analysis
+- **No zero-width characters**
+- **No base64/hex patterns**
+- **No meaningful acrostic** from first letters
+- **Every Nth letter analysis**: No clear hidden message
+
+### Network/Paths
+- `/admin` requires authentication (401)
+- Other paths return 404 or ERR_ABORTED
+- `/message_handler.php` referenced in HTML but commented out
+
+### Current Hypothesis
+**The number 5 is the answer or key to accessing `/admin`**
+- 120 ÷ 24 = 5
+- 60 - 55 = 5
+- Potential credentials: `admin/5`, `haian/5`, `5/5`
 
 ---
 

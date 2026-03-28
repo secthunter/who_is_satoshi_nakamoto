@@ -70,7 +70,46 @@ def analyze_skat_deep():
     # Mathematical relationship
     print(f"\n120 / 24 = {120 // 24}")
     print(f"120 = 24 × 5")
+    print(f"\n*** THE NUMBER 5 IS SIGNIFICANT ***")
+
+def check_hidden_in_text():
+    """Check for hidden patterns in message text"""
+    print("\n" + "="*60)
+    print("CHECKING FOR HIDDEN TEXT PATTERNS")
+    print("="*60)
+    
+    # Look for patterns that might indicate hidden data
+    for msg in MESSAGES:
+        text = msg['text']
+        
+        # Check for unusual character sequences
+        if '...' in text:
+            print(f"{msg['author']}: Contains ellipsis '...'")
+        
+        # Check for HTML entities or encoded content
+        if '&' in text and ';' in text:
+            print(f"{msg['author']}: Contains potential HTML entities")
+        
+        # Check for repeated characters (possible stego)
+        repeats = re.findall(r'(.)\1{2,}', text)
+        if repeats:
+            print(f"{msg['author']}: Repeated characters: {repeats}")
+
+def analyze_every_nth_letter():
+    """Extract every Nth letter to look for hidden messages"""
+    print("\n" + "="*60)
+    print("EVERY NTH LETTER ANALYSIS")
+    print("="*60)
+    
+    for n in [5, 10, 12, 24]:
+        all_text = ''.join([m['text'] for m in MESSAGES])
+        # Remove spaces and punctuation
+        clean = re.sub(r'[^a-zA-Z]', '', all_text)
+        nth_letters = clean[n-1::n]
+        print(f"\nEvery {n}th letter: {nth_letters[:50]}...")
 
 if __name__ == "__main__":
     analyze_isabella_date()
     analyze_skat_deep()
+    check_hidden_in_text()
+    analyze_every_nth_letter()
